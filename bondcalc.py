@@ -4,7 +4,8 @@ from pprint import pprint as pp
 import sys
 import tempfile
 # %%
-file = sys.argv[1]
+file='linda.csv'
+#file = sys.argv[1]
 tfile = tempfile.NamedTemporaryFile().name
 # %%
 with open(file, 'r') as fin:
@@ -24,9 +25,10 @@ dfira['Gains']=dfira['Quantity'].replace('[\$,]', '', regex=True).astype(float)+
 
 # %%
 dfira['TDate']=dfira['Description'].str.extract(r'(US TREASURY BILL23U S T BILL DUE )(.*)')[1]
+dfira['TDateNt']=dfira['Description'].str.extract(r'(NOTE DUE )(.*23$)')[1]
 
 # ira account gains
-dfbuyira=dfira.query('Description.str.contains("US TREASURY") and Action=="Buy" and not TDate.isnull()')
+dfbuyira=dfira.query('Description.str.contains("US TREASUR") and Action=="Buy" and not (TDate.isnull() and TDateNt.isnull())')
 pp(dfbuyira, width=800)
 
 # %%
