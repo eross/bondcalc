@@ -4,8 +4,8 @@ from pprint import pprint as pp
 import sys
 import tempfile
 # %%
-file='linda.csv'
-#file = sys.argv[1]
+#file='linda.csv'
+file = sys.argv[1]
 tfile = tempfile.NamedTemporaryFile().name
 # %%
 with open(file, 'r') as fin:
