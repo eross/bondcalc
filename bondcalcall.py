@@ -4,8 +4,8 @@ from pprint import pprint as pp
 import sys
 import tempfile
 # %%
-#file='main.csv'
-file = sys.argv[1]
+file='ericira.csv'
+#file = sys.argv[1]
 tfile = tempfile.NamedTemporaryFile().name
 # %%
 with open(file, 'r') as fin:
@@ -38,7 +38,7 @@ dfira['TDateNt'] = pd.to_datetime(dfira['TDateNt'],format='%m/%d/%y')
 
 # ira account gains
 dfbuyira=dfira.query('Description.str.contains("US TREASUR") and Action=="Buy" and not TDateNt.isnull()')
-dfbuynotes=dfira.query('Description.str.contains("NOTE DUE") or Description.str.contains("FDIC INS DUE") and Action=="Buy"')
+dfbuynotes=dfira.query('(Description.str.contains("NOTE DUE") or Description.str.contains("FDIC INS DUE")) and Action=="Buy"')
 dfbuynotes['TDateNt'] = pd.to_datetime(dfbuynotes['TDateNt'],format='%m/%d/%y')
 #pp(dfbuyira, width=800)
 
@@ -55,3 +55,5 @@ print("%.2f" % dfbuynotes['Gains'].sum())
 dfbuynotes = dfbuynotes.sort_values(by=['TDateNt'])
 print(dfbuynotes.to_string())
 
+
+# %%
