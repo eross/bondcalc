@@ -57,3 +57,29 @@ print(dfbuynotes.to_string())
 
 
 # %%
+dfrecent = dfbuynotes[dfbuynotes['TDateNt'] > pd.Timestamp.now()]
+print(dfrecent.to_string())
+# %%
+mindate=pd.Timestamp.now()
+maxdate=dfrecent['TDateNt'].max()
+index=pd.date_range(mindate, maxdate)
+#results = [part for _, part in dfrecent.groupby(pd.Grouper(freq='10D'))]
+
+# %%
+dfx = dfrecent.copy()
+dfx['index']=range(1,len(dfx)+1)
+print(dfx.to_string())
+# %%
+# test data
+index = pd.date_range('2021-01-01', '2021-05-01')
+df = pd.DataFrame({'a': range(len(index))}, index=index)
+#print(df.to_string())
+
+#results = [part for _, part in df.groupby(pd.Grouper(freq='10D'))]
+
+#df['date'] = df['TDateNt'].apply(lambda x: x.date()) # make date
+dfs = [dfx[dfx['TDateNt'] == date] for date in dfx['TDateNt'].unique()] # group by date
+
+def chunks(L, n): return [L[x: x+n] for x in range(0, len(L), n)]
+print(dfs)
+# %%
