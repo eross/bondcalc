@@ -4,7 +4,7 @@ from pprint import pprint as pp
 import sys
 import tempfile
 # %%
-file='main.csv'
+file='all.csv'
 #file = sys.argv[1]
 tfile = tempfile.NamedTemporaryFile().name
 # %%
@@ -23,7 +23,6 @@ dfira = pd.read_csv(tfile)
 #pp(dfira, width=800)
 # %%
 dfira['Gains']=dfira['Quantity'].replace('[\$,]', '', regex=True).astype(float)+(dfira['Amount'].replace('[\$,]', '', regex=True).astype(float))
-print(dfira.to_string())
 # %%
 # 
 dfira['TDateNt'] = None
@@ -79,10 +78,15 @@ df = pd.DataFrame({'a': range(len(index))}, index=index)
 #results = [part for _, part in df.groupby(pd.Grouper(freq='10D'))]
 
 #df['date'] = df['TDateNt'].apply(lambda x: x.date()) # make date
+# creates a list of dataframes
 dfs = [dfx[dfx['TDateNt'] == date] for date in dfx['TDateNt'].unique()] # group by date
 
+# %%
 def chunks(L, n): return [L[x: x+n] for x in range(0, len(L), n)]
-print(type(dfs))
-print(type(dfx))
-print(dfs)
+
+#print(dfs[1].to_string(header=False))
+for l in dfs:
+    print(l.to_string(header=False))
+    print()
+#print(dfs)
 # %%
