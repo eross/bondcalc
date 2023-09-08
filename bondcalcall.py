@@ -4,7 +4,7 @@ from pprint import pprint as pp
 import sys
 import tempfile
 # %%
-file='ericira.csv'
+file='main.csv'
 #file = sys.argv[1]
 tfile = tempfile.NamedTemporaryFile().name
 # %%
@@ -23,7 +23,7 @@ dfira = pd.read_csv(tfile)
 #pp(dfira, width=800)
 # %%
 dfira['Gains']=dfira['Quantity'].replace('[\$,]', '', regex=True).astype(float)+(dfira['Amount'].replace('[\$,]', '', regex=True).astype(float))
-#print(dfira.to_string())
+print(dfira.to_string())
 # %%
 # 
 dfira['TDateNt'] = None
@@ -31,14 +31,15 @@ dfira['TDateNt'] = None
 
 #dfira['TDateNt']=dfira['Description'].str.extract(r'(NOTE DUE )(\d\d/\d\d/\d\d$)')[1]
 dfira.loc[dfira['TDateNt'].isnull(),'TDateNt'] = dfira['Description'].str.extract(r'(NOTE DUE )(\d\d/\d\d/\d\d$)')[1]
+dfira.loc[dfira['TDateNt'].isnull(),'TDateNt'] = dfira['Description'].str.extract(r'(BILL DUE )(\d\d/\d\d/\d\d$)')[1]
 dfira.loc[dfira['TDateNt'].isnull(),'TDateNt'] = dfira['Description'].str.extract(r'(FDIC INS DUE )(\d\d/\d\d/\d\d)(.*$)')[1]
 dfira['TDateNt'] = pd.to_datetime(dfira['TDateNt'],format='%m/%d/%y')
-
+print(dfira.to_string())
 # %%
 
 # ira account gains
 dfbuyira=dfira.query('Description.str.contains("US TREASUR") and Action=="Buy" and not TDateNt.isnull()')
-dfbuynotes=dfira.query('(Description.str.contains("NOTE DUE") or Description.str.contains("FDIC INS DUE")) and Action=="Buy"')
+dfbuynotes=dfira.query('(Description.str.contains("NOTE DUE") or Description.str.contains("FDIC INS DUE") or Description.str.contains("BILL DUE")) and Action=="Buy"')
 dfbuynotes['TDateNt'] = pd.to_datetime(dfbuynotes['TDateNt'],format='%m/%d/%y')
 #pp(dfbuyira, width=800)
 
@@ -81,5 +82,7 @@ df = pd.DataFrame({'a': range(len(index))}, index=index)
 dfs = [dfx[dfx['TDateNt'] == date] for date in dfx['TDateNt'].unique()] # group by date
 
 def chunks(L, n): return [L[x: x+n] for x in range(0, len(L), n)]
+print(type(dfs))
+print(type(dfx))
 print(dfs)
 # %%
