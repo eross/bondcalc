@@ -1,2 +1,6 @@
 Download Schwab history and extract bond gains/losses to maturity.
 
+bondcalc:  crunches history
+bondcalc2: crunches current statement
+
+
